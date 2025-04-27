@@ -2,10 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { Divider } from 'primereact/divider';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
-import { setToken } from "../../Redux/tokenSlice";
+import { setToken ,setUser,setRoles} from "../../Redux/tokenSlice";
 import { useDispatch } from "react-redux";
 import axios from 'axios';
 import 'primeicons/primeicons.css';
+import { useNavigate } from 'react-router-dom';
+
 import Register from './Register'
 // import { Dialog } from 'primereact/dialog';
 // import { setToken, logOut } from '../../redux/tokenSlice'
@@ -13,13 +15,8 @@ import Register from './Register'
 // import { Link, Route, Routes } from 'react-router-dom'
 // import FormRegT from "./FormRegT";
 // import FormRegS from "./FormRegS";
-
-
-
-
-
-
 const Auth = () => {
+    const navigate = useNavigate()
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -41,9 +38,14 @@ const Auth = () => {
            
             if(res.status===200){
                 dispatch(setToken(res.data.accessToken))
+                dispatch(setUser(res.data.user))
+                dispatch(setRoles(res.data.user.roles))
+
+
                 // const userRole=(res.data.roles)
                 //if(userRole==='Admin')
                 alert("you come in")
+                // navigate('./')
             }
         }
         catch (e) {

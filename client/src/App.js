@@ -1,6 +1,8 @@
 import './App.css';
 import Auth from './Components/Auth/Auth';
+import NavBar from './Components/NavBar'
 import React from 'react';
+import LogOut from './Components/Auth/LogOut'
 import { PrimeReactProvider } from 'primereact/api';
 import 'primeflex/primeflex.css';
 import 'primereact/resources/primereact.css';
@@ -12,68 +14,20 @@ import { InputText } from 'primereact/inputtext';
 import { Avatar } from 'primereact/avatar';
 import { useNavigate } from 'react-router-dom';
 import { Routes, Route } from "react-router-dom";
+import { Provider } from 'react-redux';
+import { store } from './Redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import Advertising from './Components/Advertising'
 // import Apartment from './Components./apartments/Apartments';
 import Apartments from './Components/apartments/Apartments';
+import MyApartment from './Components/myAppartments/myAppartments';
+import Add from './Components/apartments/Add';
+import Register from './Components/Auth/Register';
 function App() {
   const navigate = useNavigate()
-
-
-  const items = [
-    {
-      label: 'Home',
-      icon: 'pi pi-home'
-    },
-    {
-      label: 'דירות',
-      icon: 'pi pi-star',
-      command: () => {
-        navigate('./apartments')
-      }
-    },
-    {
-      label: 'כניסה',
-      icon: 'pi pi-search',
-      command: () => {
-        navigate('./auth')
-      }
-      // items: [
-      //   {
-      //     label: 'Core',
-      //     icon: 'pi pi-bolt'
-      //   },
-      //   {
-      //     label: 'Blocks',
-      //     icon: 'pi pi-server'
-      //   },
-      //   {
-      //     label: 'UI Kit',
-      //     icon: 'pi pi-pencil'
-      //   },
-      //   {
-      //     separator: true
-      //   },
-      //   {
-      //     label: 'Templates',
-      //     icon: 'pi pi-palette',
-      //     items: [
-      //       {
-      //         label: 'Apollo',
-      //         icon: 'pi pi-palette'
-      //       },
-      //       {
-      //         label: 'Ultima',
-      //         icon: 'pi pi-palette'
-      //       }
-      //     ]
-      //   }
-      // ]
-    },
-    {
-      label: 'Contact',
-      icon: 'pi pi-envelope'
-    }
-  ];
-
+  const {user} = useSelector((state) => state.token);
+  const {token} = useSelector((state) => state.token);
+  const {roles} = useSelector((state) => state.token);
   const start = <img alt="logo" src="https://primefaces.org/cdn/primereact/images/logo.png" height="40" className="mr-2"></img>;
   const end = (
     <div className="flex align-items-center gap-2">
@@ -82,20 +36,29 @@ function App() {
     </div>
   );
   return (
+    <Provider store={store}>
     <PrimeReactProvider>
       <div className="App">
-
-        {<div className="card">
-          <Menubar model={items} start={start} end={end} />
-        </div>}
+       {roles=="User"?<NavBar/>:roles=="Admin"?<></>:<></>}
         <Routes>
           {/* <Route path='/home' element={<Home />} /> */}
+          <Route path='/' element={<Auth />} />
+
           <Route path='/apartments' element={<Apartments />} />
-          <Route path='/auth' element={<Auth />} />
+          <Route path='/navBar' element={<NavBar />} />
+          <Route path='/logOut' element={<LogOut />} />
+          <Route path='/advertising' element={<Advertising />} />
+          <Route path='/addApartment' element={<Add />} />
+          <Route path='/r' element={<Register />} />
+          {/* <Route path='/auth' element={<Auth />} /> */}
+          <Route path='/myApartments' element={<MyApartment />} />
+
           {/* {<Route path='/products' element={<Product />} />} */}
         </Routes>
       </div>
     </PrimeReactProvider>
+    </Provider>
+
   );
 
 }

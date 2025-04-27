@@ -13,6 +13,7 @@ export const ApartmentService = {
                 return [];
             }
         },
+        
         getProductsMini() {
             return Promise.resolve(this.getApartmentsData().slice(0, 5));
         },

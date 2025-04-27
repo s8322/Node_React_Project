@@ -15,7 +15,14 @@ const createMyApartment = async (req, res) => {
 }
 const getMyApartmentByUserId = async (req, res) => {
     const { myApartment_id } = req.body
-    const myApartments = await MyApartment.find({ myApartment: myApartment_id }).sort({ name: 1 }).lean()
+    const myApartments = await MyApartment.find({ myApartment: myApartment_id }).sort({ name: 1 })
+    .populate('address') // Populate address
+    .populate('user') // Populate user from the apartment model
+    .populate({
+      path: 'user', // Populate the user addresses
+      populate: 'address' // Populate the address in the user model
+    })
+      .lean();
     if (!myApartments) {
         return res.status(400).json({ message: "No apartments found" })
     }
@@ -23,7 +30,13 @@ const getMyApartmentByUserId = async (req, res) => {
 }
 const getMyApartmentById = async (req, res) => {
     const { id } = req.params
-    const myApartment = await MyApartment.findById(id).lean()
+    const myApartment = await MyApartment.findById(id) .populate('address') // Populate address
+    .populate('user') // Populate user from the apartment model
+    .populate({
+      path: 'user', // Populate the user addresses
+      populate: 'address' // Populate the address in the user model
+    })
+      .lean();
     if (!myApartment)
         return res.status(400).json({ message: "No apartments found" })
     res.json(myApartment)

@@ -8,6 +8,7 @@ const apartmentController = require("../controllers/apartmentController")
 router.post("/", verifyJWT,apartmentController.createApartment)
 router.get("/", apartmentController.getAllApartment)
 router.get("/:id", apartmentController.getApartmentById)
+router.get("/userid/:id", apartmentController.getApartmentsByUserId)
 router.put("/",verifyJWT, apartmentController.updateApartment)
 router.delete("/", apartmentController.deleteApartment)
 

@@ -1,85 +1,153 @@
-import React, { useRef } from "react";
-import axios from "axios"
-import { InputText } from 'primereact/inputtext'
-import { Dialog } from 'primereact/dialog';
+//  import React from 'react';
+//     import { useForm } from 'react-hook-form';
+//     const Add=()=>{
+   
+//       const { register, handleSubmit, formState: { errors } } = useForm();
+//       const onSubmit = data => console.log(data);
+//       console.log(errors);
+      
+//       return (
+//         <form onSubmit={handleSubmit(onSubmit)}>
+//           <input type="text" placeholder="city" {...register("city", {required: true, maxLength: 80})} />
+//           <input type="text" placeholder="neighborhood" {...register} />
+//           <input type="text" placeholder="street" {...register("street", {required: true, maxLength: 80})} />
+//           <input type="number" placeholder="building" {...register("building", {required: true, max: 1000, min: -2})} />
+//           <input type="text" placeholder="floor" {...register("floor", {required: true})} />
+//           <input type="number" placeholder="price" {...register("price", {, min: 0})} />
+//           <textarea {...register("description", {required: true, maxLength: 300})} />
+//           <input type="text" placeholder="img" {...register} />
+//           <input type="number" placeholder="size" {...register("size", {required: true, min: 1})} />
+//           <input type="number" placeholder="numOfRooms" {...register("numOfRooms", {required: true})} />
+//           <select {...register("airDirections", { required: true })}>
+//             <option value="0">0</option>
+//             <option value="1">1</option>
+//             <option value="2">2</option>
+//             <option value="3">3</option>
+//             <option value="4">4</option>
+//           </select>
+//           <input type="checkbox" placeholder="view" {...register} />
+//           <input type="checkbox" placeholder="sukkahBalcony" {...register} />
+//           <input type="text" placeholder="bars" {...register} />
+    
+//           <input type="submit" />
+//         </form>
+//       );
+//     }
+
+
+// // return(
+// //     <></>
+// // )
+
+// export default Add
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { InputText } from 'primereact/inputtext';
+import { InputNumber } from 'primereact/inputnumber';
+import { Dropdown } from 'primereact/dropdown';
+import { Checkbox } from 'primereact/checkbox';
 import { Button } from 'primereact/button';
+import { Toast } from 'primereact/toast';
 
-const Add = (props) => {
-    const userRef = useRef("")
-    const usernameRef = useRef("")
-    const phoneRef = useRef("")
-    const addressRef = useRef("")
-    const emailRef = useRef("")
-    const addUser = async () => {
-        const newUser = {
-            name: nameRef.current.value,
-            username: usernameRef.current.value,
-            email: emailRef.current.value,
-            phone: phoneRef.current.value,
-            address: addressRef.current.value
-        }
-        try {
-            const res = await axios.post('http://localhost:8000/users', newUser)
-            if (res.status === 201) {
-                await props.getUsers()
-            }
-        }
-        catch (e) {
-            console.error(e)
-        }
-    }
-    return (
-        <div className="card flex justify-content-center">
-            <Dialog
-                visible={props.visible}
-                modal
-                onHide={() => { if (!props.visible) return; props.setVisible(false); }}
-                content={({ hide }) => (
-                    <div className="flex flex-column px-8 py-5 gap-4" style={{ borderRadius: '12px', backgroundImage: 'radial-gradient(circle at left top, var(--primary-400), var(--primary-700))' }}>
-
-                        <div className="inline-flex flex-column gap-2">
-                            <label htmlFor="name" className="text-primary-50 font-semibold">
-                                Name
-                            </label>
-                            <InputText id="name" label="name" className="bg-white-alpha-20 border-none p-3 text-primary-50" ref={nameRef} ></InputText>
-                        </div>
-                        <div className="inline-flex flex-column gap-2">
-                            <label htmlFor="username" className="text-primary-50 font-semibold">
-                                Username
-                            </label>
-                            <InputText id="username" label="username" className="bg-white-alpha-20 border-none p-3 text-primary-50" ref={usernameRef} ></InputText>
-                        </div>
-                        <div className="inline-flex flex-column gap-2">
-                            <label htmlFor="email" className="text-primary-50 font-semibold">
-                                Email
-                            </label>
-                            <InputText id="email" label="email" className="bg-white-alpha-20 border-none p-3 text-primary-50" ref={emailRef}  ></InputText>
-                        </div>
-                        <div className="inline-flex flex-column gap-2">
-                            <label htmlFor="address" className="text-primary-50 font-semibold">
-                                Address
-                            </label>
-                            <InputText id="address" label="address" className="bg-white-alpha-20 border-none p-3 text-primary-50" ref={addressRef} ></InputText>
-                        </div>
-                        <div className="inline-flex flex-column gap-2">
-                            <label htmlFor="phone" className="text-primary-50 font-semibold">
-                                Phone
-                            </label>
-                            <InputText id="phone" label="phone" className="bg-white-alpha-20 border-none p-3 text-primary-50" ref={phoneRef} ></InputText>
-                        </div>
-                        <div className="flex align-items-center gap-2">
-                            <Button label="Save" onClick={(e) => {
-                                hide(e);
-                                addUser()
-                            }
-                            } text className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"></Button>
-                            <Button label="Cancel" onClick={(e) => hide(e)} text className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"></Button>
-                        </div>
-                    </div>
-                )}
-            ></Dialog>
+const Add = () => {
+  const toast = React.useRef(null);
+  
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const onSubmit = data => {
+      console.log(data);
+      toast.current.show({ severity: 'success', summary: 'Form Submitted', detail: 'Data has been submitted', life: 3000 });
+  };
+  
+  return (
+    <div className="p-fluid">
+      <Toast ref={toast} />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="p-field">
+          <label htmlFor="city">City</label>
+          <InputText id="city" {...register("city", { required: true, maxLength: 80 })} />
+          {errors.city && <small className="p-error">This field is required</small>}
         </div>
-    )
+
+        <div className="p-field">
+          <label htmlFor="neighborhood">Neighborhood</label>
+          <InputText id="neighborhood" {...register("neighborhood", { required: true })} />
+          {errors.neighborhood && <small className="p-error">This field is required</small>}
+        </div>
+
+        <div className="p-field">
+          <label htmlFor="street">Street</label>
+          <InputText id="street" {...register("street", { required: true, maxLength: 80 })} />
+          {errors.street && <small className="p-error">This field is required</small>}
+        </div>
+
+        <div className="p-field">
+          <label htmlFor="building">Building</label>
+          <InputNumber id="building" {...register("building", { required: true, max: 1000, min: -2 })} />
+          {errors.building && <small className="p-error">This field is required</small>}
+        </div>
+
+        <div className="p-field">
+          <label htmlFor="floor">Floor</label>
+          <InputText id="floor" {...register("floor", { required: true })} />
+          {errors.floor && <small className="p-error">This field is required</small>}
+        </div>
+
+        <div className="p-field">
+          <label htmlFor="price">Price</label>
+          <InputNumber id="price" {...register("price", { required: true, min: 0 })} />
+          {errors.price && <small className="p-error">This field is required</small>}
+        </div>
+
+        <div className="p-field">
+          <label htmlFor="description">Description</label>
+          <InputText id="description" {...register("description", { required: true, maxLength: 300 })} />
+          {errors.description && <small className="p-error">This field is required</small>}
+        </div>
+
+        <div className="p-field">
+          <label htmlFor="size">Size</label>
+          <InputNumber id="size" {...register("size", { required: true, min: 1 })} />
+          {errors.size && <small className="p-error">This field is required</small>}
+        </div>
+
+        <div className="p-field">
+          <label htmlFor="numOfRooms">Number of Rooms</label>
+          <InputNumber id="numOfRooms" {...register("numOfRooms", { required: true })} />
+          {errors.numOfRooms && <small className="p-error">This field is required</small>}
+        </div>
+
+        <div className="p-field">
+          <label htmlFor="airDirections">Air Directions</label>
+          <Dropdown id="airDirections" {...register("airDirections", { required: true })} options={[
+            { label: 'Select air direction', value: null },
+            { label: '0', value: 0 },
+            { label: '1', value: 1 },
+            { label: '2', value: 2 },
+            { label: '3', value: 3 },
+            { label: '4', value: 4 }
+          ]} />
+          {errors.airDirections && <small className="p-error">This field is required</small>}
+        </div>
+
+        <div className="p-field-checkbox">
+          <Checkbox inputRef={register} name="view" />
+          <label htmlFor="view">View</label>
+        </div>
+
+        <div className="p-field-checkbox">
+          <Checkbox inputRef={register} name="sukkahBalcony" />
+          <label htmlFor="sukkahBalcony">Sukkah Balcony</label>
+        </div>
+
+        <div className="p-field">
+          <label htmlFor="bars">Bars</label>
+          <InputText id="bars" {...register("bars")} />
+        </div>
+
+        <Button label="Submit" type="submit" />
+      </form>
+    </div>
+  );
 }
 
-export default Add
+export default Add;
